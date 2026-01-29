@@ -7,82 +7,52 @@
 
 <style>
 body {
-    margin: 0; padding: 0; background: #ffd6e0;
-    font-family: cursive; text-align:center; overflow-x:hidden;
+    margin:0; padding:0; background:#ffd6e0; font-family:cursive; text-align:center; overflow-x:hidden;
 }
-
-/* FORM BOX */
 .form-box {
-    width: 350px; margin: 20px auto; padding: 15px;
-    background: #fff; border-radius: 15px; box-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+    width:350px; margin:20px auto; padding:15px;
+    background:#fff; border-radius:15px; box-shadow:2px2px10px rgba(0,0,0,0.2);
 }
 .form-box input, .form-box textarea {
-    width: 90%; padding: 10px; margin: 8px 0;
-    border-radius: 10px; border: 1px solid #e60039; outline:none; box-sizing:border-box;
+    width:90%; padding:10px; margin:8px 0; border-radius:10px; border:1px solid #e60039; outline:none; box-sizing:border-box;
 }
-.form-box button {
-    background: gray; color:white; border:none;
-    padding: 12px 25px; border-radius:25px; font-size:1rem; cursor:not-allowed;
-}
-.form-box button.active {
-    background: #e60039; cursor:pointer;
-}
-
-/* CARD CONTAINER */
 #container {
-    width: 350px; margin: 20px auto 50px; padding: 25px;
-    background-color: #ffe6e6; border: 2px solid #e60039;
-    border-radius: 20px; box-shadow: 2px2px10px rgba(0,0,0,0.2); text-align:center;
+    width:350px; margin:20px auto 50px; padding:25px; background:#ffe6e6;
+    border:2px solid #e60039; border-radius:20px; box-shadow:2px2px10px rgba(0,0,0,0.2);
 }
-
-/* HEADER */
 #header h1 { color:#e60039; margin:10px 0; }
 #header hr { border:1px solid #e60039; }
-
-/* HEART IMAGE */
 .heart-image {
-    width: 120px; height:120px; margin:15px auto; border-radius:50%;
-    border:3px solid #e60039;
-    background: linear-gradient(45deg, #ff69b4 0%, #e60039 100%);
-    display:flex; align-items:center; justify-content:center;
-    font-size:60px; color:white;
+    width:120px; height:120px; margin:15px auto; border-radius:50%;
+    border:3px solid #e60039; background:linear-gradient(45deg,#ff69b4 0%,#e60039 100%);
+    display:flex; align-items:center; justify-content:center; font-size:60px; color:white;
 }
-
-/* MESSAGE BOX */
 .message {
-    background: #ffe6f0; padding: 20px; border-radius: 20px;
-    margin: 20px 0; box-shadow:2px2px10px rgba(0,0,0,0.2); color:#e60039;
+    background:#ffe6f0; padding:20px; border-radius:20px; margin:20px 0; box-shadow:2px2px10px rgba(0,0,0,0.2); color:#e60039;
 }
-
-/* SHARE LINK BUTTON */
-#shareLink {
-    display:none; background:#e60039; color:white; padding:12px 25px;
-    border-radius:25px; text-decoration:none; margin:5px; display:inline-block;
-}
-
-/* SEND BUTTONS */
 .send-btn {
-    background: #e60039; color: white; border:none; padding:12px 25px;
+    background:#e60039; color:white; border:none; padding:12px 25px;
     border-radius:25px; font-size:1rem; cursor:pointer; margin:5px;
 }
 .send-btn:hover { background:#b8002d; transform:scale(1.05); }
-
 .email-btn { background:#007bff; }
 .email-btn:hover { background:#0056b3; }
-
-/* FLOATING HEARTS */
 .heart { position:fixed; bottom:0; font-size:20px; animation:floatUp 4s linear infinite; }
 @keyframes floatUp { from { transform:translateY(0); opacity:1; } to { transform:translateY(-100vh); opacity:0; } }
+#shareLink {
+    display:none; background:#e60039; color:white; padding:12px 25px; border-radius:25px;
+    text-decoration:none; margin:5px; display:inline-block;
+}
 </style>
 </head>
 
 <body>
 
 <!-- INPUT FORM -->
-<div class="form-box">
-    <input type="text" id="toName" placeholder="Recipient name" oninput="updateCard()">
-    <textarea id="msgText" placeholder="Your message" oninput="updateCard()"></textarea>
-    <input type="text" id="fromName" placeholder="Your name" oninput="updateCard()">
+<div class="form-box" id="formBox">
+    <input type="text" id="toName" placeholder="Recipient name">
+    <textarea id="msgText" placeholder="Your message"></textarea>
+    <input type="text" id="fromName" placeholder="Your name">
     <button id="generateLinkBtn" onclick="generateLink()">Generate Shareable Link</button>
 </div>
 
@@ -101,14 +71,16 @@ body {
         <h3 id="senderName">Love, Your Name</h3>
     </div>
 
-    <!-- SHARE BUTTONS -->
-    <a id="shareLink" target="_blank">Click to copy/share your card link</a><br>
-    <button class="send-btn" id="whatsappBtn" onclick="sendWhatsApp()">💬 WhatsApp</button>
-    <button class="send-btn email-btn" id="emailBtn" onclick="sendEmail()">✉️ Email</button>
+    <!-- SHARE LINK -->
+    <a id="shareLink" target="_blank">Click to open/share your card</a><br>
+
+    <!-- DIRECT SHARE -->
+    <button class="send-btn" onclick="sendWhatsApp()">💬 WhatsApp</button>
+    <button class="send-btn email-btn" onclick="sendEmail()">✉️ Email</button>
 </div>
 
 <script>
-// Update card as user types
+// Update card live
 function updateCard() {
     const to = document.getElementById("toName").value;
     const msg = document.getElementById("msgText").value;
@@ -117,77 +89,81 @@ function updateCard() {
     document.getElementById("dearName").innerText = to ? `Dear ${to},` : "Dear Name,";
     document.getElementById("cardMessage").innerText = msg ? msg : "You mean the world to me...";
     document.getElementById("senderName").innerText = from ? `Love, ${from}` : "Love, Your Name";
-
-    const btn = document.getElementById("generateLinkBtn");
-    if(msg.trim() !== "") btn.classList.add("active"); else btn.classList.remove("active");
 }
 
-// Generate shareable link
+// Generate shareable link (localStorage version)
 function generateLink() {
-    const to = encodeURIComponent(document.getElementById("toName").value.trim());
-    const msg = encodeURIComponent(document.getElementById("msgText").value.trim());
-    const from = encodeURIComponent(document.getElementById("fromName").value.trim());
+    const to = document.getElementById("toName").value.trim();
+    const msg = document.getElementById("msgText").value.trim();
+    const from = document.getElementById("fromName").value.trim();
 
-    if(!msg){ alert("Please write a message first!"); return; }
+    if(!msg){ alert("Please enter a message!"); return; }
 
-    const url = `${location.origin}${location.pathname}?to=${to}&msg=${msg}&from=${from}`;
-    const shareLink = document.getElementById("shareLink");
-    shareLink.href = url;
-    shareLink.style.display = "inline-block";
+    // Store card in localStorage
+    const cardData = { to, msg, from };
+    localStorage.setItem("valentineCard", JSON.stringify(cardData));
 
+    // Show generic link
+    const url = location.origin + location.pathname + "?view=true";
+    const linkEl = document.getElementById("shareLink");
+    linkEl.href = url;
+    linkEl.style.display = "inline-block";
+
+    // Copy to clipboard
     navigator.clipboard.writeText(url)
-        .then(() => alert("Link copied to clipboard!"))
-        .catch(() => alert("Copy failed! Link: " + url));
+        .then(()=>alert("Link copied! Send it to your loved one."))
+        .catch(()=>alert("Copy failed. Link: " + url));
+}
+
+// Load card if shared link clicked
+function loadCardFromLocalStorage() {
+    const params = new URLSearchParams(location.search);
+    if(params.get("view") === "true"){
+        const cardData = JSON.parse(localStorage.getItem("valentineCard") || "{}");
+        if(cardData.msg){
+            document.getElementById("dearName").innerText = cardData.to ? `Dear ${cardData.to},` : "Dear Name,";
+            document.getElementById("cardMessage").innerText = cardData.msg;
+            document.getElementById("senderName").innerText = cardData.from ? `Love, ${cardData.from}` : "Love, Your Name";
+            document.getElementById("formBox").style.display = "none"; // hide form
+            document.getElementById("shareLink").style.display = "none"; // hide share button
+        }
+    }
 }
 
 // WhatsApp share
 function sendWhatsApp() {
-    const to = document.getElementById("toName").value || "someone special";
-    const msg = document.getElementById("msgText").value;
-    const from = document.getElementById("fromName").value || "me";
-    const url = encodeURIComponent(location.origin + location.pathname + `?to=${to}&msg=${msg}&from=${from}`);
+    const to = document.getElementById("dearName").innerText.replace("Dear ", "").replace(",", "");
+    const msg = document.getElementById("cardMessage").innerText;
+    const from = document.getElementById("senderName").innerText.replace("Love, ", "");
+    const url = location.origin + location.pathname + "?view=true";
     const waText = `Valentine Card for ${to}\n\n"${msg}"\n\nLove, ${from}\n\nView it here: ${url}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(waText)}`, '_blank');
 }
 
 // Email share
 function sendEmail() {
-    const to = document.getElementById("toName").value || "someone special";
-    const msg = document.getElementById("msgText").value;
-    const from = document.getElementById("fromName").value || "me";
-    const url = location.origin + location.pathname + `?to=${encodeURIComponent(to)}&msg=${encodeURIComponent(msg)}&from=${encodeURIComponent(from)}`;
+    const to = document.getElementById("dearName").innerText.replace("Dear ", "").replace(",", "");
+    const msg = document.getElementById("cardMessage").innerText;
+    const from = document.getElementById("senderName").innerText.replace("Love, ", "");
+    const url = location.origin + location.pathname + "?view=true";
     const subject = `💕 Valentine Card for ${to}`;
     const body = `Hi! ${from} made you this beautiful Valentine card!\n\n${msg}\n\nView it here: ${url}`;
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
 
-// Load card from URL parameters
-function loadFromURL() {
-    const params = {};
-    location.search.substring(1).split("&").forEach(pair=>{
-        if(pair){
-            const [key,value] = pair.split("=");
-            params[key] = decodeURIComponent(value || "");
-        }
-    });
-    if(params.to || params.msg || params.from){
-        document.getElementById("dearName").innerText = params.to ? `Dear ${params.to},` : "Dear Name,";
-        document.getElementById("cardMessage").innerText = params.msg ? params.msg : "You mean the world to me...";
-        document.getElementById("senderName").innerText = params.from ? `Love, ${params.from}` : "Love, Your Name";
-    }
-}
-
-loadFromURL();
-
 // Floating hearts
-setInterval(() => {
+setInterval(()=>{
     const heart = document.createElement("div");
-    heart.className = "heart";
-    heart.innerText = "❤️";
-    heart.style.left = Math.random() * 100 + "vw";
+    heart.className="heart"; heart.innerText="❤️";
+    heart.style.left = Math.random()*100+"vw";
     document.body.appendChild(heart);
-    setTimeout(()=>heart.remove(), 4000);
-}, 500);
+    setTimeout(()=>heart.remove(),4000);
+},500);
+
+// Run on load
+updateCard();
+loadCardFromLocalStorage();
 </script>
+
 </body>
 </html>
