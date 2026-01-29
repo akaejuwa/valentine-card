@@ -3,11 +3,17 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Valentine Card</title>
-<meta property="og:title" content="💕 Valentine Card">
-<meta property="og:description" content="A special message just for you">
+<title>💕 Valentine Card</title>
+
+<!-- WHATSAPP PREVIEW - PERFECT ORDER -->
+<meta property="og:title" content="💕 Valentine Card for You">
+<meta property="og:description" content="A special Valentine's message just for you">
 <meta property="og:image" content="https://via.placeholder.com/350/ff69b4/fff?text=💕">
-</head>
+<meta property="og:image:width" content="350">
+<meta property="og:image:height" content="350">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://akaejuwa.github.io/valentine-card">
+<meta name="twitter:card" content="summary_large_image">
 
 <style>
 body {
@@ -52,7 +58,9 @@ body {
 .heart { position: fixed; bottom: 0; font-size: 20px; animation: floatUp 4s linear infinite; }
 @keyframes floatUp { from { transform: translateY(0); opacity: 1; } to { transform: translateY(-100vh); opacity: 0; } }
 </style>
+</head>
 
+<body>
 <div class="form-box">
     <input type="text" id="toName" placeholder="Recipient name" oninput="updateCard()">
     <textarea id="msgText" placeholder="Your message" oninput="updateCard()"></textarea>
@@ -64,7 +72,7 @@ body {
         <h1>❤️ Happy Valentine's Day! ❤️</h1><hr>
     </div>
     
-    <!-- 💖 PURE CSS HEART - NO 403 ERRORS EVER -->
+    <!-- PURE CSS HEART -->
     <div class="heart-image">💕</div>
     
     <div class="message">
@@ -97,14 +105,16 @@ function updateCard() {
         document.getElementById("emailBtn").classList.remove("active");
     }
 }
+
 function sendWhatsApp() {
     const to = document.getElementById("toName").value || "someone special";
     const msg = document.getElementById("msgText").value;
     const from = document.getElementById("fromName").value || "me";
     const url = window.location.href;
-    const whatsappMessage = `💕 Valentine Card for ${to} 💕%0A%0A"${msg}"%0A%0ALove, ${from}%0A%0ACheck it out: ${url}`;
+    const whatsappMessage = `💕 Valentine Card for ${to} 💕%0A%0A"${msg}"%0A%0ALove, ${from}%0A%0A${url}`;
     window.open(`https://wa.me/?text=${encodeURIComponent(whatsappMessage)}`, '_blank');
 }
+
 function sendEmail() {
     const to = document.getElementById("toName").value || "someone special";
     const msg = document.getElementById("msgText").value;
@@ -114,6 +124,7 @@ function sendEmail() {
     const body = `Hi! ${from} made you this beautiful Valentine card!\n\n${msg}\n\nView it here: ${url}`;
     window.location.href = `mailto:?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 }
+
 setInterval(() => {
     const heart = document.createElement("div");
     heart.className = "heart";
